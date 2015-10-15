@@ -683,8 +683,8 @@ if __name__ == "__main__":
     put(controller, DEFAULT_PORT, get_service_function_paths_uri(), get_service_function_paths_data(), True)
     print "sending tunnel"
     put(controller, DEFAULT_PORT, get_tunnel_uri(), get_tunnel_data(), True)
-    print "sending tenant"
-    put(controller, DEFAULT_PORT, get_tenant_uri(), get_tenant_data(),True)
-    print "registering endpoints"
-    for endpoint in get_endpoint_data():
-        post(controller, DEFAULT_PORT, get_endpoint_uri(),endpoint,True)
+    print "sending tenant -- SKIPPED"
+    ## put(controller, DEFAULT_PORT, get_tenant_uri(), get_tenant_data(),True)
+    print "registering endpoints -- SKIPPED"
+    ## for endpoint in get_endpoint_data():
+    ##    post(controller, DEFAULT_PORT, get_endpoint_uri(),endpoint,True)
