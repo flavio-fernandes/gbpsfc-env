@@ -681,8 +681,8 @@ if __name__ == "__main__":
     put(controller, DEFAULT_PORT, get_service_function_chains_uri(), get_service_function_chains_data(), True)
     print "sending service function paths"
     put(controller, DEFAULT_PORT, get_service_function_paths_uri(), get_service_function_paths_data(), True)
-    print "sending tunnel"
-    put(controller, DEFAULT_PORT, get_tunnel_uri(), get_tunnel_data(), True)
+    ## print "sending tunnel -- SKIPPED"
+    ## put(controller, DEFAULT_PORT, get_tunnel_uri(), get_tunnel_data(), True)
     print "sending tenant -- SKIPPED"
     ## put(controller, DEFAULT_PORT, get_tenant_uri(), get_tenant_data(),True)
     print "registering endpoints -- SKIPPED"
