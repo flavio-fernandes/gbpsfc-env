@@ -740,10 +740,10 @@ if __name__ == "__main__":
     print "sending service function forwarders"
     put(controller, DEFAULT_PORT, get_service_function_forwarders_uri(), get_service_function_forwarders_data(), True)
 
-    # print "sending service function chains"
-    # put(controller, DEFAULT_PORT, get_service_function_chains_uri(), get_service_function_chains_data(), True)
-    # print "sending service function paths"
-    # put(controller, DEFAULT_PORT, get_service_function_paths_uri(), get_service_function_paths_data(), True)
+    print "sending service function chains"
+    put(controller, DEFAULT_PORT, get_service_function_chains_uri(), get_service_function_chains_data(), True)
+    print "sending service function paths"
+    put(controller, DEFAULT_PORT, get_service_function_paths_uri(), get_service_function_paths_data(), True)
 
     print "sending netvirt-sfc"
     put(controller, DEFAULT_PORT, get_netvirt_sfc_uri(), get_netvirt_sfc_data(), True)
