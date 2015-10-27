@@ -39,5 +39,15 @@ for i in `seq 1 $NUM_NODES`; do
   echo $hostname
   vagrant ssh $hostname -c "sudo -E /vagrant/get-nsps.py"
 done
+
+echo "Clean l2switch flows"
+for i in 1 2 4 6; do
+  hostname="gbpsfc"$i
+  sw="sw"$i
+  echo $hostname
+  vagrant ssh $hostname -c "sudo ovs-ofctl -O OpenFlow13 --strict del-flows br-int priority=1,arp"
+  vagrant ssh $hostname -c "sudo ovs-ofctl -O OpenFlow13 --strict del-flows $sw priority=1,arp"
+done
+
 echo "$demo" > demo.lock
 

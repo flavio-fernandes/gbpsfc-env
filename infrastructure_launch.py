@@ -139,6 +139,11 @@ if __name__ == "__main__" :
            print "*****************************"
            print "Configuring %s as an SFF." % sw_name
            print "*****************************"
+           dpid=switches[sw_index]['dpid']
+           addSwitch(sw_name,dpid)
+           setOFVersion(sw_name)
+           addController(sw_name, controller)
+           addGpeTunnel(sw_name)
            doCmd('sudo ovs-vsctl set-manager tcp:%s:6640' % controller)
            print
        elif sw_type == 'sf':

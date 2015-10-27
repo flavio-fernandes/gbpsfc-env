@@ -82,9 +82,9 @@ if __name__ == "__main__":
     else:
 	print "Contacting controller at %s" % controller
 
-    resp=get(controller,DEFAULT_PORT,'/restconf/operational/endpoint:endpoints')
-    l2_eps=resp['endpoints']['endpoint']
-    l3_eps=resp['endpoints']['endpoint-l3']
+    #resp=get(controller,DEFAULT_PORT,'/restconf/operational/endpoint:endpoints')
+    #l2_eps=resp['endpoints']['endpoint']
+    #l3_eps=resp['endpoints']['endpoint-l3']
 
     print "deleting service function paths"
     rest_delete(controller, DEFAULT_PORT, get_service_function_paths_uri(), True)
@@ -98,18 +98,18 @@ if __name__ == "__main__":
     print "deleting service function forwarders"
     rest_delete(controller, DEFAULT_PORT, get_service_function_forwarders_uri(), True)
 
-    print "deleting tunnel"
-    rest_delete(controller, DEFAULT_PORT, get_tunnel_uri(), True)
+    #print "deleting tunnel"
+    #rest_delete(controller, DEFAULT_PORT, get_tunnel_uri(), True)
 
-    print "deleting tenant"
-    rest_delete(controller, DEFAULT_PORT, get_tenant_uri(), True)
+    #print "deleting tenant"
+    #rest_delete(controller, DEFAULT_PORT, get_tenant_uri(), True)
 
-    print "unregistering L2 endpoints"
-    for endpoint in l2_eps:
-	data={ "input": { "l2": [ { "l2-context": endpoint['l2-context'] ,"mac-address": endpoint['mac-address'] } ] } }
-        post(controller, DEFAULT_PORT, get_endpoint_uri(),data,True)
+    #print "unregistering L2 endpoints"
+    #for endpoint in l2_eps:
+    #data={ "input": { "l2": [ { "l2-context": endpoint['l2-context'] ,"mac-address": endpoint['mac-address'] } ] } }
+    #    post(controller, DEFAULT_PORT, get_endpoint_uri(),data,True)
 
-    print "unregistering L3 endpoints"
-    for endpoint in l3_eps:
-	data={ "input": { "l3": [ { "l3-context": endpoint['l3-context'] ,"ip-address": endpoint['ip-address'] } ] } }
-        post(controller, DEFAULT_PORT, get_endpoint_uri(),data,True)
+    #print "unregistering L3 endpoints"
+    #for endpoint in l3_eps:
+    #data={ "input": { "l3": [ { "l3-context": endpoint['l3-context'] ,"ip-address": endpoint['ip-address'] } ] } }
+    #    post(controller, DEFAULT_PORT, get_endpoint_uri(),data,True)
