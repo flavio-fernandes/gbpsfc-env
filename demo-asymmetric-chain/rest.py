@@ -674,21 +674,24 @@ def get_ietf_acl_data():
                             {
                                 "rule-name": "http-rule",
                                 "matches": {
+                                    "protocol": "6",
                                     "destination-port-range": {
                                         "lower-port": "80",
                                         "upper-port": "80"
-                                        }
                                     },
+                                    "destination-ipv4-network": "192.168.50.75/32",
+                                    "source-ipv4-network": "10.0.35.2/32"
+                                },
                                 "actions": {
-                                    "permit": "true"                                
-                                    }
+                                    "netvirt-sfc-acl:redirect-sfc": "SFCGBP"
                                 }
-                            ]
-                        }
+                            }
+                        ]
                     }
-                ]
-            }
+                }
+            ]
         }
+    }
 
 def get_classifier_uri():
     return "/restconf/config/netvirt-sfc-classifier:classifiers"
@@ -703,14 +706,26 @@ def get_classifier_data():
                     "sffs": {
                         "sff": [
                             {
-                                "name": "sff1"
-                                }
-                            ]
-                        }
+                                "name": "SFF1"
+                            }
+                        ]
+                    },
+                    "bridges": {
+                        "bridge": [
+                            {
+                                "name": "sw1",
+                                "direction": "ingress"
+                            },
+                            {
+                                "name": "sw6",
+                                "direction": "egress"
+                            }
+                        ]
                     }
-                ]
-            }
+                }
+            ]
         }
+    }
 
 def get_netvirt_sfc_uri():
     return "/restconf/config/netvirt-sfc:sfc/"
@@ -719,8 +734,8 @@ def get_netvirt_sfc_data():
     return {
         "sfc": {
             "name": "sfc1"
-            }
         }
+    }
 
 if __name__ == "__main__":
     # Launch main menu
@@ -733,22 +748,28 @@ if __name__ == "__main__":
     else:
 	print "Contacting controller at %s" % controller
 
-    tenants=get(controller,DEFAULT_PORT,CONF_TENANT)
+    #tenants=get(controller,DEFAULT_PORT,CONF_TENANT)
 
     print "sending service functions"
     put(controller, DEFAULT_PORT, get_service_functions_uri(), get_service_functions_data(), True)
     print "sending service function forwarders"
     put(controller, DEFAULT_PORT, get_service_function_forwarders_uri(), get_service_function_forwarders_data(), True)
 
+    print "sf's and sff's created"
+    time.sleep(5)
     print "sending service function chains"
     put(controller, DEFAULT_PORT, get_service_function_chains_uri(), get_service_function_chains_data(), True)
     print "sending service function paths"
     put(controller, DEFAULT_PORT, get_service_function_paths_uri(), get_service_function_paths_data(), True)
 
+    print "sfc's and sfp's created"
+    time.sleep(5)
     print "sending netvirt-sfc"
     put(controller, DEFAULT_PORT, get_netvirt_sfc_uri(), get_netvirt_sfc_data(), True)
+    time.sleep(1)
     print "sending ietf-acl"
     put(controller, DEFAULT_PORT, get_ietf_acl_uri(), get_ietf_acl_data(), True)
+    time.sleep(1)
     print "sending classifier"
     put(controller, DEFAULT_PORT, get_classifier_uri(), get_classifier_data(), True)
 

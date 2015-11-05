@@ -32,10 +32,18 @@ def rest_delete(host, port, uri, debug=False):
                'Accept': 'application/yang.data+json'}
     if debug == True:
         print "DELETE %s" % url
-    r = requests.delete(url, headers=headers, auth=HTTPBasicAuth(USERNAME, PASSWORD))
+    try:
+        r = requests.delete(url, headers=headers, auth=HTTPBasicAuth(USERNAME, PASSWORD))
+    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
+        print "oops: ", e
+        return
     if debug == True:
         print r.text
-    r.raise_for_status()
+    try:
+        r.raise_for_status()
+    except:
+        print "oops: ", sys.exc_info()[0]
+
 
 def post(host, port, uri, data, debug=False):
     '''Perform a POST rest operation, using the URL and data provided'''
@@ -70,6 +78,15 @@ def get_tunnel_uri():
 
 def get_endpoint_uri():
     return "/restconf/operations/endpoint:unregister-endpoint"
+
+def get_ietf_acl_uri():
+    return "/restconf/config/ietf-access-control-list:access-lists"
+
+def get_classifier_uri():
+    return "/restconf/config/netvirt-sfc-classifier:classifiers"
+
+def get_netvirt_sfc_uri():
+    return "/restconf/config/netvirt-sfc:sfc/"
 
 if __name__ == "__main__":
     # Launch main menu
@@ -113,3 +130,12 @@ if __name__ == "__main__":
     #for endpoint in l3_eps:
     #data={ "input": { "l3": [ { "l3-context": endpoint['l3-context'] ,"ip-address": endpoint['ip-address'] } ] } }
     #    post(controller, DEFAULT_PORT, get_endpoint_uri(),data,True)
+
+    print "deleting acl"
+    rest_delete(controller, DEFAULT_PORT, get_ietf_acl_uri(), True)
+
+    print "deleting classifier"
+    rest_delete(controller, DEFAULT_PORT, get_classifier_uri(), True)
+
+    print "deleting netvirt sfc"
+    rest_delete(controller, DEFAULT_PORT, get_netvirt_sfc_uri(), True)

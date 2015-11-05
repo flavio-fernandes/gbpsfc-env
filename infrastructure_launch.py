@@ -33,16 +33,19 @@ def addSwitch(name, dpid=None):
 def addHost(net, switch, name, ip, mac):
     containerID=launchContainer()
 
-def setOFVersion(sw, version='OpenFlow13,OpenFlow12,OpenFlow10'):
+#,OpenFlow12,OpenFlow10
+def setOFVersion(sw, version='OpenFlow13'):
     call(['ovs-vsctl', 'set', 'bridge', sw, 'protocols={}'.format(version)])
 
-def addTunnel(sw, sourceIp=None):
+def addTunnel(sw, port, sourceIp=None, remoteIp=None):
     ifaceName = '{}-vxlan-0'.format(sw)
     cmd = ['ovs-vsctl', 'add-port', sw, ifaceName,
            '--', 'set', 'Interface', ifaceName,
            'type=vxlan',
-           'options:remote_ip=flow',
-           'options:key=flow']
+           'options:local_ip=%s'%sourceIp,
+           'options:remote_ip=%s'%remoteIp,
+           'options:key=4096',
+           'ofport_request=%s'%port]
 #    if sourceIp is not None:
 #        cmd.append('options:source_ip={}'.format(sourceIp))
     call(cmd)
@@ -60,7 +63,8 @@ def addGpeTunnel(sw, sourceIp=None):
            'options:nshc4=flow',
            'options:nsp=flow',
            'options:nsi=flow',
-           'options:key=flow']
+           'options:key=flow',
+           'ofport_request=7']
 #    if sourceIp is not None:
 #        cmd.append('options:source_ip={}'.format(sourceIp))
     call(cmd)
@@ -99,7 +103,10 @@ def launch(switches, hosts, contIP='127.0.0.1'):
                     setOFVersion(sw['name'])
                     addController(sw['name'], contIP)
                     addGpeTunnel(sw['name'])
-                    addTunnel(sw['name'])
+                    if host['switch'] == "sw1":
+                        addTunnel(sw['name'], 5, "192.168.50.70", "192.168.50.75")
+                    if host['switch'] == "sw6":
+                        addTunnel(sw['name'], 5, "192.168.50.75", "192.168.50.70")
                 first_host=False
                 containerImage=defaultContainerImage #from Config
                 if host.has_key('container_image'): #from Config
@@ -126,10 +133,13 @@ if __name__ == "__main__" :
            print
            launch([switches[sw_index]],hosts,controller)
            print "*****************************"
+           doCmd('sudo /vagrant/utils/overlay-flows.sh')
+           print "*****************************"
            print "OVS status:"
            print "-----------"
            print
            doCmd('ovs-vsctl show')
+           doCmd('ovs-ofctl -O OpenFlow13 dump-flows %s'%sw_name)
            print
            print "Docker containers:"
            print "------------------"
@@ -139,12 +149,14 @@ if __name__ == "__main__" :
            print "*****************************"
            print "Configuring %s as an SFF." % sw_name
            print "*****************************"
+           doCmd('sudo ovs-vsctl set-manager tcp:%s:6640' % controller)
+           time.sleep(1)
            dpid=switches[sw_index]['dpid']
            addSwitch(sw_name,dpid)
            setOFVersion(sw_name)
            addController(sw_name, controller)
-           addGpeTunnel(sw_name)
-           doCmd('sudo ovs-vsctl set-manager tcp:%s:6640' % controller)
+           #addGpeTunnel(sw_name)
+           #doCmd('sudo ovs-vsctl set-manager tcp:%s:6640' % controller)
            print
        elif sw_type == 'sf':
            print "*****************************"
