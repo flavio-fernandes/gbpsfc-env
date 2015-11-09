@@ -660,6 +660,83 @@ def get_endpoint_data():
 def get_endpoint_uri():
     return "/restconf/operations/endpoint:register-endpoint"
 
+def get_ietf_acl_uri():
+    return "/restconf/config/ietf-access-control-list:access-lists"
+
+def get_ietf_acl_data():
+    return {
+        "access-lists": {
+            "acl": [
+                {
+                    "acl-name": "http-acl",
+                    "access-list-entries": {
+                        "ace": [
+                            {
+                                "rule-name": "http-rule",
+                                "matches": {
+                                    "protocol": "6",
+                                    "destination-port-range": {
+                                        "lower-port": "80",
+                                        "upper-port": "80"
+                                    },
+                                    "destination-ipv4-network": "192.168.50.75/32",
+                                    "source-ipv4-network": "10.0.35.2/32"
+                                },
+                                "actions": {
+                                    "netvirt-sfc-acl:redirect-sfc": "SFCGBP"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+
+def get_classifier_uri():
+    return "/restconf/config/netvirt-sfc-classifier:classifiers"
+
+def get_classifier_data():
+    return {
+        "classifiers": {
+            "classifier": [
+                {
+                    "name": "http-classifier",
+                    "acl": "http-acl",
+                    "sffs": {
+                        "sff": [
+                            {
+                                "name": "SFF1"
+                            }
+                        ]
+                    },
+                    "bridges": {
+                        "bridge": [
+                            {
+                                "name": "sw1",
+                                "direction": "ingress"
+                            },
+                            {
+                                "name": "sw6",
+                                "direction": "egress"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+
+def get_netvirt_sfc_uri():
+    return "/restconf/config/netvirt-sfc:sfc/"
+
+def get_netvirt_sfc_data():
+    return {
+        "sfc": {
+            "name": "sfc1"
+        }
+    }
+
 if __name__ == "__main__":
     # Launch main menu
 
@@ -671,20 +748,38 @@ if __name__ == "__main__":
     else:
 	print "Contacting controller at %s" % controller
 
-    tenants=get(controller,DEFAULT_PORT,CONF_TENANT)
+    #tenants=get(controller,DEFAULT_PORT,CONF_TENANT)
 
     print "sending service functions"
     put(controller, DEFAULT_PORT, get_service_functions_uri(), get_service_functions_data(), True)
     print "sending service function forwarders"
     put(controller, DEFAULT_PORT, get_service_function_forwarders_uri(), get_service_function_forwarders_data(), True)
+
+    print "sf's and sff's created"
+    time.sleep(5)
     print "sending service function chains"
     put(controller, DEFAULT_PORT, get_service_function_chains_uri(), get_service_function_chains_data(), True)
     print "sending service function paths"
     put(controller, DEFAULT_PORT, get_service_function_paths_uri(), get_service_function_paths_data(), True)
-    print "sending tunnel"
-    put(controller, DEFAULT_PORT, get_tunnel_uri(), get_tunnel_data(), True)
-    print "sending tenant"
-    put(controller, DEFAULT_PORT, get_tenant_uri(), get_tenant_data(),True)
-    print "registering endpoints"
-    for endpoint in get_endpoint_data():
-        post(controller, DEFAULT_PORT, get_endpoint_uri(),endpoint,True)
+
+    print "sfc's and sfp's created"
+    time.sleep(5)
+    print "sending netvirt-sfc"
+    put(controller, DEFAULT_PORT, get_netvirt_sfc_uri(), get_netvirt_sfc_data(), True)
+    time.sleep(1)
+    print "sending ietf-acl"
+    put(controller, DEFAULT_PORT, get_ietf_acl_uri(), get_ietf_acl_data(), True)
+    time.sleep(1)
+    print "sending classifier"
+    put(controller, DEFAULT_PORT, get_classifier_uri(), get_classifier_data(), True)
+
+
+    # print "sending tunnel -- SKIPPED"
+    ## put(controller, DEFAULT_PORT, get_tunnel_uri(), get_tunnel_data(), True)
+    # print "sending tenant -- SKIPPED"
+    ## put(controller, DEFAULT_PORT, get_tenant_uri(), get_tenant_data(),True)
+    # print "registering endpoints -- SKIPPED"
+    ## for endpoint in get_endpoint_data():
+    ##    post(controller, DEFAULT_PORT, get_endpoint_uri(),endpoint,True)
+
+
