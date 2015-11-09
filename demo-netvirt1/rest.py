@@ -172,7 +172,7 @@ def get_tenant_data():
                 "id": "cbe0cc07-b8ff-451d-8171-9eef002a8e80"
             }
         ], 
-        "name": "GBPPOC", 
+        "name": "NETVIRTPOC", 
         "subject-feature-instances": {
             "classifier-instance": [
                 {

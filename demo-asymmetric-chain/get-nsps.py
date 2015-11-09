@@ -38,6 +38,19 @@ if __name__ == "__main__":
     #else:
 	#print "Contacting controller at %s" % controller
 
+    sw_index=int(socket.gethostname().split("netvirtsfc",1)[1])-1
+    if sw_index in range(0,len(switches)+1):
+        controller=os.environ.get('ODL')
+        sw_type = switches[sw_index]['type']
+        sw_name = switches[sw_index]['name']
+        if sw_type == 'sf':
+            print "******************************"
+            print "Adding flows for %s as an SF." % sw_name
+            print "******************************"
+            doCmd('sudo /vagrant/utils/sf-flows.sh')
+
+
+def foobar():
     resp=get(controller,DEFAULT_PORT,get_rsps_uri())
     if len(resp['rendered-service-paths']) > 0:
        paths=resp['rendered-service-paths']['rendered-service-path']
@@ -46,7 +59,7 @@ if __name__ == "__main__":
        for path in paths:
            nsps.append(path['path-id'])
        if len(nsps) > 0:
-           sw_index=int(socket.gethostname().split("gbpsfc",1)[1])-1
+           sw_index=int(socket.gethostname().split("netvirtsfc",1)[1])-1
            if sw_index in range(0,len(switches)+1):
 
               controller=os.environ.get('ODL')

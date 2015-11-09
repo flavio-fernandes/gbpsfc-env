@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-hostnum=${HOSTNAME#"gbpsfc"}
+hostnum=${HOSTNAME#"netvirtsfc"}
 sw="sw$hostnum"
 set -e
 if [ "$1" ]

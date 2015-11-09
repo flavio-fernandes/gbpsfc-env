@@ -18,11 +18,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ips = num_nodes.times.collect { |n| ip_base + "#{n+70}" }
 
   num_nodes.times do |n|
-    config.vm.define "gbpsfc#{n+1}", autostart: true do |compute|
+    config.vm.define "netvirtsfc#{n+1}", autostart: true do |compute|
       vm_ip = ips[n]
       vm_index = n+1
       compute.vm.box = "ubuntu/trusty64"
-      compute.vm.hostname = "gbpsfc#{vm_index}"
+      compute.vm.hostname = "netvirtsfc#{vm_index}"
       compute.vm.network "private_network", ip: "#{vm_ip}"
       compute.vm.provider :virtualbox do |vb|
         vb.memory = 512

@@ -195,7 +195,7 @@ def get_service_function_chains_data():
     "service-function-chains": {
         "service-function-chain": [
             {
-                "name": "SFCGBP",
+                "name": "SFCNETVIRT",
                 "symmetric": "true",
                 "sfc-service-function": [
                     {
@@ -220,8 +220,8 @@ def get_service_function_paths_data():
     "service-function-paths": {
         "service-function-path": [
             {
-                "name": "SFCGBP-Path",
-                "service-chain-name": "SFCGBP",
+                "name": "SFCNETVIRT-Path",
+                "service-chain-name": "SFCNETVIRT",
                 "starting-index": 255,
                 "symmetric": "true"
 
@@ -347,7 +347,7 @@ def get_tenant_data():
               "parameter-value": [
                 {
                   "name": "sfc-chain-name",
-                  "string-value": "SFCGBP"
+                  "string-value": "SFCNETVIRT"
                 }
               ]
             },

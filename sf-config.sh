@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-hostnum=${HOSTNAME#"gbpsfc"}
+hostnum=${HOSTNAME#"netvirtsfc"}
 sw="sw$hostnum"
 
 if [ "$hostnum" -eq "3" ]; then
