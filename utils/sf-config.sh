@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-hostnum=${HOSTNAME#"gbpsfc"}
+hostnum=${HOSTNAME#"netvirtsfc"}
 sw="sw$hostnum"
 sudo ovs-vsctl add-br $sw
 ovs-vsctl add-port $sw sfc-tun$hostnum -- set interface sfc-tun$hostnum type=vxlan options:remote_ip=flow options:dst_port=6633 options:key=flow options:nsi=flow options:nsp=flow options:"nshc1"=flow options:"nshc2"=flow options:"nshc3"=flow options:"nshc4"=flow

@@ -195,7 +195,7 @@ def get_service_function_chains_data():
     "service-function-chains": {
         "service-function-chain": [
             {
-                "name": "SFCGBP",
+                "name": "SFCNETVIRT",
                 "symmetric": "false",
                 "sfc-service-function": [
                     {
@@ -220,8 +220,8 @@ def get_service_function_paths_data():
     "service-function-paths": {
         "service-function-path": [
             {
-                "name": "SFCGBP-Path",
-                "service-chain-name": "SFCGBP",
+                "name": "SFCNETVIRT-Path",
+                "service-chain-name": "SFCNETVIRT",
                 "starting-index": 255,
                 "symmetric": "false"
 
@@ -347,7 +347,7 @@ def get_tenant_data():
               "parameter-value": [
                 {
                   "name": "sfc-chain-name",
-                  "string-value": "SFCGBP"
+                  "string-value": "SFCNETVIRT"
                 }
               ]
             },
@@ -683,7 +683,7 @@ def get_ietf_acl_data():
                                     "source-ipv4-network": "10.0.35.2/32"
                                 },
                                 "actions": {
-                                    "netvirt-sfc-acl:redirect-sfc": "SFCGBP"
+                                    "netvirt-sfc-acl:redirect-sfc": "SFCNETVIRT"
                                 }
                             }
                         ]

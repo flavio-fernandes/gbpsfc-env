@@ -4,7 +4,7 @@
 # sw6: h35_4, dl_src=00:00:00:00:35:04
 
 set -e
-hostnum=${HOSTNAME#"gbpsfc"}
+hostnum=${HOSTNAME#"netvirtsfc"}
 sw="sw$hostnum"
 
 if [ "$hostnum" -eq "1" ]; then

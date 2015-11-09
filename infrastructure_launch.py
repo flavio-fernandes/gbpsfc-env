@@ -120,15 +120,15 @@ def launch(switches, hosts, contIP='127.0.0.1'):
 if __name__ == "__main__" :
 #    print "Cleaning environment..."
 #    doCmd('/vagrant/clean.sh')
-    sw_index=int(socket.gethostname().split("gbpsfc",1)[1])-1
+    sw_index=int(socket.gethostname().split("netvirtsfc",1)[1])-1
     if sw_index in range(0,len(switches)+1):
 
        controller=os.environ.get('ODL')
        sw_type = switches[sw_index]['type']
        sw_name = switches[sw_index]['name']
-       if sw_type == 'gbp':
+       if sw_type == 'netvirt':
            print "*****************************"
-           print "Configuring %s as a GBP node." % sw_name
+           print "Configuring %s as a NETVIRT node." % sw_name
            print "*****************************"
            print
            launch([switches[sw_index]],hosts,controller)

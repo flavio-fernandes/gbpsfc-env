@@ -1,13 +1,13 @@
 # Config for switches, tunnelIP is the local IP address.
 switches = [
             {'name': 'sw1',
-             'type': 'gbp',
+             'type': 'netvirt',
              'dpid': '1'},
             {'name': 'sw2',
-             'type': 'gbp',
+             'type': 'netvirt',
              'dpid': '2'},
             {'name': 'sw3',
-             'type': 'gbp',
+             'type': 'netvirt',
              'dpid': '3'},
             {'name': 'sw4',
              'type': 'none',

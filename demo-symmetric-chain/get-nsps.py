@@ -46,7 +46,7 @@ if __name__ == "__main__":
        for path in paths:
            nsps.append(path['path-id'])
        if len(nsps) > 0:
-           sw_index=int(socket.gethostname().split("gbpsfc",1)[1])-1
+           sw_index=int(socket.gethostname().split("netvirtsfc",1)[1])-1
            if sw_index in range(0,len(switches)+1):
 
               controller=os.environ.get('ODL')

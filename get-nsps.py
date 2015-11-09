@@ -38,7 +38,7 @@ if __name__ == "__main__":
     #else:
 	#print "Contacting controller at %s" % controller
 
-    sw_index=int(socket.gethostname().split("gbpsfc",1)[1])-1
+    sw_index=int(socket.gethostname().split("netvirtsfc",1)[1])-1
     if sw_index in range(0,len(switches)+1):
         controller=os.environ.get('ODL')
         sw_type = switches[sw_index]['type']
@@ -59,7 +59,7 @@ def foobar():
        for path in paths:
            nsps.append(path['path-id'])
        if len(nsps) > 0:
-           sw_index=int(socket.gethostname().split("gbpsfc",1)[1])-1
+           sw_index=int(socket.gethostname().split("netvirtsfc",1)[1])-1
            if sw_index in range(0,len(switches)+1):
 
               controller=os.environ.get('ODL')

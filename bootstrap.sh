@@ -5,7 +5,7 @@
 echo "---> Updating operating system"
 apt update -qq
 
-echo "---> Installing Group Based Policy requirements"
+echo "---> Installing OVSDB Netvirt requirements"
 apt install -y software-properties-common -qq
 apt install -y python-software-properties -qq
 apt install -y python-pip -qq
@@ -25,6 +25,6 @@ curl https://raw.githubusercontent.com/pritesh/ovs/nsh-v8/third-party/start-ovs-
 # this part is just for local spinup DON'T copy it to releng bootstrap.sh
 pip install ipaddr
 echo "export PATH=$PATH:/vagrant" >> /home/vagrant/.profile
-echo "export ODL="$1 >> /home/vagrant/.profile
+echo "export ODL=$1" >> /home/vagrant/.profile
 usermod -aG docker vagrant
 

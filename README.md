@@ -1,6 +1,6 @@
 #SETUP
 
-This is a demonstration/development environment for show-casing OpenDaylight GroupBasedPolicy (GBP) with ServiceFunctionChaining (SFC)
+This is a demonstration/development environment for show-casing OpenDaylight OVSDB NETVIRT with ServiceFunctionChaining (SFC)
 
 The initial instalation may take some time, with vagrant and docker image downloads. 
 
@@ -9,7 +9,7 @@ After the first time it is very quick.
 1. Set up Vagrant. 
   * Edit env.sh for NUM_NODES. (Keep all other vars the same for this version)
   * Each VM takes approximately 1G RAM, 2GB used HDD (40GB)
-  * demo-gbp1: 3 VMs.
+  * demo-netvirt1: 3 VMs.
   * demo-symmetric-chain: 6 VMs.
   * demo-asymmetric-chain: 6 VMs.
 2. From the directory you cloned into:
@@ -21,21 +21,21 @@ vagrant up
 
 3. Start controller.
   * Currently it is expected that that controller runs on the host hosting the VMs.
-  * Tested using groupbasedpolicy stable/lithium.
+  * Tested using ovsdb netvirt beryllium.
   * Start controller by running bin/karaf and install following features in karaf:
 
 ```
- feature:install odl-groupbasedpolicy-ofoverlay odl-groupbasedpolicy-ui odl-restconf
+ feature:install odl-ovsdb-sfc-ui odl-restconf
 ```
 
-  * Run `log:tail | grep renderer` and wait until the following message appears in the log:
+  * Run `log:tail | grep sfc` and wait until the following message appears in the log:
 ```
-INFO - OFOverlayRenderer - org.opendaylight.groupbasedpolicy.ofoverlay-renderer - Initialized OFOverlay renderer
+ INFO 20 - org.apache.karaf.features.core - 3.0.3 | Installing feature odl-ovsdb-sfc-ui
 ```
   * Now you can ^C the log:tail if you wish
 
 #Demos:
-* demo-gbp1: 
+* demo-netvirt1: 
   * 8 docker containers in 2 x EPGs (web, client)
   * contract with ICMP and HTTP
 * demo-symmetry:
@@ -45,14 +45,14 @@ INFO - OFOverlayRenderer - org.opendaylight.groupbasedpolicy.ofoverlay-renderer 
   * 2 docker containers in 2 x EPGs (web, client)
   * contract with ICMP (ALLOW) and HTTP (CHAIN, where Client request is chained, Web reverse path is ALLOW)
 
-##demo-gbp1
+##demo-netvirt1
 
 ###Setup
 
 VMs:
-* gbpsfc1: gbp
-* gbpsfc2: gbp
-* gbpsfc3: gbp
+* netvirtsfc1: netvirt
+* netvirtsfc2: netvirt
+* netvirtsfc3: netvirt
 
 Containers:
 * h35_{x} are in EPG:client
@@ -60,15 +60,15 @@ Containers:
 
 To run, from host folder where Vagrantfile located do:
 
-` ./startdemo.sh demo-gbp1`
+` ./startdemo.sh demo-netvirt1`
 
-After this, `infrastructure_config.py` will be copied from `/demo-gbp1`, and you are ready to start testing.
+After this, `infrastructure_config.py` will be copied from `/demo-netvirt1`, and you are ready to start testing.
  
 ###To test:
 
 SSH to test VM (may take some seconds):
 ```bash
-vagrant ssh gbpsfc1
+vagrant ssh netvirtsfc1
 ```
 
 Get root rights:
@@ -82,7 +82,7 @@ docker ps
 ```
 
 Notice there are containers from two different endpoint groups, "h35" and "h36".
-Enter into the shell on one of "h36" (web) container (on `gbpsfc1` it will be `h36_4`, its IP is `10.0.36.4`, 
+Enter into the shell on one of "h36" (web) container (on `netvirtsfc1` it will be `h36_4`, its IP is `10.0.36.4`, 
 you will need it later).
 *(You need double ENTER after `docker attach`)*
 ```bash
@@ -94,7 +94,7 @@ Start a HTTP server:
 python -m SimpleHTTPServer 80
 ```
 
-Press `Ctrl-P-Q` to return to your root shell on `gbpsfc1`
+Press `Ctrl-P-Q` to return to your root shell on `netvirtsfc1`
 
 Enter into one of "h35" (client) container, 
 ping the container where HTTP server runs, 
@@ -122,7 +122,7 @@ Leave to main shell:
 exit #leave root shell
 exit #close ssh session
 ```
-Repeat `vagrant ssh` etc. for each of gbpsfc2, gbpsfc3.
+Repeat `vagrant ssh` etc. for each of netvirtsfc2, netvirtsfc3.
 
 ###After testing
 
@@ -135,20 +135,22 @@ If you like `vagrant destroy` will remove all VMs.
 ##demo-symmetric-chain / demo-asymmetric-chain
 
 VMs:
-* gbpsfc1: gbp (client initiates transactions from here)
-* gbpsfc2: sff
-* gbpsfc3: "sf"
-* gbpsfc4: sff
-* gbpsfc5: "sf"
-* gbpsfc6: gbp (run a server here)
+* netvirtsfc1: netvirt (client initiates transactions from here)
+* netvirtsfc2: sff
+* netvirtsfc3: "sf"
+* netvirtsfc4: sff
+* netvirtsfc5: "sf"
+* netvirtsfc6: netvirt (run a server here)
 
 Containers:
-* h35_2 is in EPG:client on gbpsfc1
-* h36_4 is in EPG:web on gbpsfc6
+* h35_2 is in EPG:client on netvirtsfc1
+* h36_4 is in EPG:web on netvirtsfc6
 
 To run, from host folder where Vagrantfile located do:
 
-` ./startdemo.sh demo-symmetric-chain` | `demo-asymmetric-chain`
+` ./startdemo.sh demo-symmetric-chain`
+-OR-
+` ./startdemo.sh demo-asymmetric-chain`
 
 For now, go through each POSTMAN entry in the folder for the demo. This will be ported.
 
@@ -157,26 +159,26 @@ Start a test HTTP server on h36_4 in VM 6.
 
 *(don't) forget double ENTER after `docker attach`*
 ```bash
-vagrant ssh gbpsfc6
+vagrant ssh netvirtsfc6
 sudo -E docker ps
-sudo -E docker attach h36_4
+sudo -E docker attach h35_4
 python -m SimpleHTTPServer 80
 ```
 
-Ctrl-P-Q to detach from docker without stopping the SimpleHTTPServer, and logoff gbpsfc6.
+Ctrl-P-Q to detach from docker without stopping the SimpleHTTPServer, and logoff netvirtsfc6.
 
 Now start client traffic, either ping or make HTTP requests to the server on h36_4.
 
 ```bash
-vagrant ssh gbpsfc1
+vagrant ssh netvirtsfc1
 sudo -E docker ps
 sudo -E docker attach h35_2
-ping 10.0.36.4
-curl 10.0.36.4
-while true; do curl 10.0.36.4; sleep 1; done
+ping 10.0.35.4
+curl 10.0.35.4
+while true; do curl 10.0.35.4; sleep 1; done
 ```
 
-Ctrl-P-Q to detach from docker, leaving the client making HTTP requests, and logoff gbpsfc1.
+Ctrl-P-Q to detach from docker, leaving the client making HTTP requests, and logoff netvirtsfc1.
 
 
 Look around: use "vagrant ssh" to the various machines 

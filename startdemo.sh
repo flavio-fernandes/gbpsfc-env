@@ -25,7 +25,7 @@ echo "Base subnet: " $SUBNET
 
 for i in `seq 1 $NUM_NODES`; do
 #for i in 1 6; do
-  hostname="gbpsfc"$i
+  hostname="netvirtsfc"$i
   echo $hostname
   vagrant ssh $hostname -c "sudo -E /vagrant/infrastructure_launch.py"
 done
@@ -33,7 +33,7 @@ done
 sleep 5
 echo "Clean l2switch flows"
 for i in 1 2 4 6; do
-  hostname="gbpsfc"$i
+  hostname="netvirtsfc"$i
   sw="sw"$i
   echo $hostname
   vagrant ssh $hostname -c "sudo ovs-ofctl -O OpenFlow13 --strict del-flows br-int priority=1,arp"
@@ -46,14 +46,14 @@ echo "Configuring controller..."
 echo "Post-controller configuration..."
 cp $demo/get-nsps.py .
 for i in `seq 1 $NUM_NODES`; do
-  hostname="gbpsfc"$i
+  hostname="netvirtsfc"$i
   echo $hostname
   vagrant ssh $hostname -c "sudo -E /vagrant/get-nsps.py"
 done
 
 sleep 5
 for i in 1 6; do
-  hostname="gbpsfc"$i
+  hostname="netvirtsfc"$i
   sw="sw"$i
   echo $hostname
   vagrant ssh $hostname -c "sudo ovs-vsctl show; sudo ovs-ofctl -O OpenFlow13 dump-flows $sw"
