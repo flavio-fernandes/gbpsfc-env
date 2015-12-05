@@ -30,13 +30,12 @@ def doCmd(cmd):
 if __name__ == "__main__":
     # Launch main menu
 
-
     # Some sensible defaults
     controller=os.environ.get('ODL')
     if controller == None:
         sys.exit("No controller set.")
     #else:
-	#print "Contacting controller at %s" % controller
+    #print "Contacting controller at %s" % controller
 
     sw_index=int(socket.gethostname().split("netvirtsfc",1)[1])-1
     if sw_index in range(0,len(switches)+1):

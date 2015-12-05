@@ -9,8 +9,8 @@ After the first time it is very quick.
 1. Set up Vagrant. 
   * Edit env.sh for NUM_NODES. (Keep all other vars the same for this version)
   * Each VM takes approximately 1G RAM, 2GB used HDD (40GB)
-  * demo-netvirt1: 3 VMs.
-  * demo-symmetric-chain: 6 VMs.
+  * demo-netvigit clone https://github.com/flavio-fernandes/netvirtsfc-env.gitrt1: 3 VMs.
+  * demo-symmetric-chain: 6 VMs. Note this is not fully working yet.
   * demo-asymmetric-chain: 6 VMs.
 2. From the directory you cloned into:
 ```
@@ -22,28 +22,40 @@ vagrant up
 3. Start controller.
   * Currently it is expected that that controller runs on the host hosting the VMs.
   * Tested using ovsdb netvirt beryllium.
+
+  * Set config for your setup:
+    * Modify the NetvirtSfc config.xml to start in standalone mode. set the value of of13provider to standalone
+    * Modify the logging levels to help with troubleshooting
+    * Use the script, setsfc.sh, to make the two above changes. Modify the rootdir variable to point to whereever the karaf distribution was unzipped.
+
   * Start controller by running bin/karaf and install following features in karaf:
 
 ```
- feature:install odl-ovsdb-sfc-ui odl-restconf
+ feature:install odl-ovsdb-sfc-ui
 ```
 
-  * Run `log:tail | grep sfc` and wait until the following message appears in the log:
+  * Run `log:tail | grep openstack.net-virt-sfc.xml` and wait until the following message appears in the log:
 ```
- INFO 20 - org.apache.karaf.features.core - 3.0.3 | Installing feature odl-ovsdb-sfc-ui
+ Successfully pushed configuration snapshot openstack.net-virt-sfc.xml
 ```
   * Now you can ^C the log:tail if you wish
 
-#Demos:
+4. Continue with the steps for one of the demos below.
+
+Demos:
+TODO: should remove this along with any files for it, unless they are useful.
+Include the rest of the text in here that goes with the demo-netvirt1
 * demo-netvirt1: 
   * 8 docker containers in 2 x EPGs (web, client)
   * contract with ICMP and HTTP
 * demo-symmetry:
-  * 2 docker containers in 2 x EPGs (web, client)
-  * contract with ICMP (ALLOW) and HTTP (CHAIN, where Client request is chained, Web reverse path is reverse path of chain)
+  * Service Chain classifying HTTP traffic.
+  * Traffic in the forward direction is chained and in the reverse direction is chained in reverse order
+  * 2 docker containers in the same tenant space
 * demo-asymmetry:
-  * 2 docker containers in 2 x EPGs (web, client)
-  * contract with ICMP (ALLOW) and HTTP (CHAIN, where Client request is chained, Web reverse path is ALLOW)
+  * Service Chain classifying HTTP traffic.
+  * Traffic in the forward direction is chained and in the reverse direction the traffic uses the normal VxLAN tunnel
+  * 2 docker containers in the same tenant space
 
 ##demo-netvirt1
 
@@ -143,8 +155,8 @@ VMs:
 * netvirtsfc6: netvirt (run a server here)
 
 Containers:
-* h35_2 is in EPG:client on netvirtsfc1
-* h36_4 is in EPG:web on netvirtsfc6
+* h35_2 is on netvirtsfc1. This host serves as the client.
+* h35_4 is netvirtsfc6. This host serves as the webserver.
 
 To run, from host folder where Vagrantfile located do:
 
@@ -152,10 +164,8 @@ To run, from host folder where Vagrantfile located do:
 -OR-
 ` ./startdemo.sh demo-asymmetric-chain`
 
-For now, go through each POSTMAN entry in the folder for the demo. This will be ported.
-
 ### To test by sending traffic:
-Start a test HTTP server on h36_4 in VM 6.
+Start a test HTTP server on h35_4 in VM 6.
 
 *(don't) forget double ENTER after `docker attach`*
 ```bash
@@ -194,8 +204,5 @@ If you like `vagrant destroy` will remove all VMs
 ##Preparing to run another demo
 1. In the vagrant directory, run cleandemo.sh
 2. stop controller (logout of karaf)
-3. Remove journal and snapshot directories from controller directory.
-4. Restart the controller, install features, wait, as above.
-
-
-
+3. Remove data, journal and snapshot directories from controller directory.
+4. Restart tests starting with restarting the controller, install features, wait, as above.
