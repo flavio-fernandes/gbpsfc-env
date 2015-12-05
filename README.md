@@ -2,6 +2,8 @@
 
 This is a demonstration/development environment for show-casing OpenDaylight OVSDB NETVIRT with ServiceFunctionChaining (SFC)
 
+git clone https://github.com/flavio-fernandes/netvirtsfc-env.git
+
 The initial instalation may take some time, with vagrant and docker image downloads. 
 
 After the first time it is very quick.
@@ -9,7 +11,7 @@ After the first time it is very quick.
 1. Set up Vagrant. 
   * Edit env.sh for NUM_NODES. (Keep all other vars the same for this version)
   * Each VM takes approximately 1G RAM, 2GB used HDD (40GB)
-  * demo-netvigit clone https://github.com/flavio-fernandes/netvirtsfc-env.gitrt1: 3 VMs.
+  * demo-netvirt1: 3 VMs.
   * demo-symmetric-chain: 6 VMs. Note this is not fully working yet.
   * demo-asymmetric-chain: 6 VMs.
 2. From the directory you cloned into:
