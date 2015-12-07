@@ -17,4 +17,4 @@ logcfg=$rootdir/etc/org.ops4j.pax.logging.cfg
 echo "log4j.logger.org.opendaylight.ovsdb.openstack.netvirt.sfc = TRACE" >> $logcfg
 #echo "log4j.logger.org.opendaylight.ovsdb.lib = INFO" >> $logcfg
 echo "log4j.logger.org.opendaylight.sfc = TRACE" >> $logcfg
-echo "org.opendaylight.openflowplugin.applications.statistics.manager.impl.StatListenCommitFlow" ERROR >> $logcfg
+echo "log4j.logger.org.opendaylight.openflowplugin.applications.statistics.manager.impl.StatListenCommitFlow = ERROR" >> $logcfg
