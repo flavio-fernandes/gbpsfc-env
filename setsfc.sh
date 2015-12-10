@@ -13,10 +13,10 @@ sed -i -e 's/<of13provider>[a-z]\{1,\}<\/of13provider>/<of13provider>standalone<
 ODL_NETVIRT_SFC_KARAF_FEATURE='odl-ovsdb-sfc-ui'
 ODLFEATUREMATCH=$(cat ${ODL_ROOT_DIR}/etc/org.apache.karaf.features.cfg | \
                             grep -e "featuresBoot=" -e "featuresBoot =" | grep $ODL_NETVIRT_SFC_KARAF_FEATURE)
-# if [ "$ODLFEATUREMATCH" == "" ]; then
-#    sed -i -e "/^featuresBoot[ ]*=/ s/$/,$ODL_NETVIRT_SFC_KARAF_FEATURE/" \
-#        ${ODL_ROOT_DIR}/etc/org.apache.karaf.features.cfg
-# fi
+if [ "$ODLFEATUREMATCH" == "" ]; then
+   sed -i -e "/^featuresBoot[ ]*=/ s/$/,$ODL_NETVIRT_SFC_KARAF_FEATURE/" \
+       ${ODL_ROOT_DIR}/etc/org.apache.karaf.features.cfg
+fi
 
 # Set the logging levels for troubleshooting
 logcfg=${ODL_ROOT_DIR}/etc/org.ops4j.pax.logging.cfg
