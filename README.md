@@ -1,14 +1,25 @@
 #SETUP
 
-This is a demonstration/development environment for show-casing OpenDaylight OVSDB NETVIRT with ServiceFunctionChaining (SFC)
+This is a demonstration / development environment for show-casing OpenDaylight OVSDB NETVIRT with ServiceFunctionChaining (SFC)
 
 git clone https://github.com/flavio-fernandes/netvirtsfc-env.git
 
-in the very near future, this demo setup will be folded into the ovsdb repo of the Opendaylight project.
-You will find it in this directory:  ./resources/demo/netvirtsfc-env
+This demo setup can also be found under the the ovsdb repo of the Opendaylight project:
 
+```
+https://github.com/opendaylight/ovsdb/tree/master/resources
+```
 
-The initial instalation may take some time, with vagrant and docker image downloads. 
+You will find it in the directory:  resources/demo/netvirtsfc-env
+
+This demo is analogous to the demo done by the group-based-policy project of Opendaylight. In fact, the kudos
+for putting it together goes to our friends Keith, Thomas, and others responsible for GBP:
+
+```
+https://github.com/alagalah/gbpsfc-env
+```
+
+The initial installation may take some time, with vagrant and docker image downloads. 
 
 After the first time it is very quick.
 
@@ -71,7 +82,7 @@ vagrant up
   * Traffic in the forward direction is chained and in the reverse direction the traffic uses the normal VxLAN tunnel
   * 2 docker containers in the same tenant space
 
-![asymmetric-chain demo diagram](https://raw.githubusercontent.com/flavio-fernandes/netvirtsfc-env/master/images/asymmetric-sfc-demo.png)
+![asymmetric-chain demo diag](https://raw.githubusercontent.com/flavio-fernandes/netvirtsfc-env/master/images/asymmetric-sfc-demo.png)
 
 VMs:
 * netvirtsfc1: netvirt (client initiates transactions from here)
