@@ -1,3 +1,6 @@
 .vagrant
 *.pyc
 demo.lock
+infrastructure_config.py
+sf-config.sh
+

@@ -11,6 +11,11 @@ apt install -y python-software-properties -qq
 apt install -y python-pip -qq
 apt install -y git-core git -qq
 apt install -y curl -qq
+
+echo "---> Installing wireshark"
+apt install -y xbase-clients -qq
+apt install -y wireshark -qq
+
 # docker
 curl -sSL https://get.docker.com/ | sh
 
@@ -27,4 +32,3 @@ pip install ipaddr
 echo "export PATH=$PATH:/vagrant" >> /home/vagrant/.profile
 echo "export ODL=$1" >> /home/vagrant/.profile
 usermod -aG docker vagrant
-

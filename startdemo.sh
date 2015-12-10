@@ -13,10 +13,7 @@ if [ -f "demo.lock" ]; then
 fi
 
 cp $demo/infrastructure_config.py .
-
-if [ -f $demo/sf-config.sh ]; then
-    cp $demo/sf-config.sh .
-fi
+cp $demo/sf-config.sh .
 
 echo "Starting demo from $demo with vars:"
 echo "Number of nodes: " $NUM_NODES
@@ -43,14 +40,6 @@ done
 
 echo "Configuring controller..."
 ./$demo/rest.py
-
-#echo "Post-controller configuration..."
-#cp $demo/get-nsps.py .
-#for i in `seq 1 $NUM_NODES`; do
-#  hostname="netvirtsfc"$i
-#  echo $hostname
-#  vagrant ssh $hostname -c "sudo -E /vagrant/get-nsps.py"
-#done
 
 sleep 5
 for i in 1 6; do
